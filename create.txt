@@ -1,0 +1,305 @@
+<template>
+    <div class="container">
+        <h1 class="margin-bottom-15">Applicant Form</h1>
+        <form class="form-horizontal templatemo-create-account templatemo-container" role="form"
+              @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+            <div class="form-inner">
+                <div class="form-group">
+                    <div class="col-md-12" align="center">
+                        <div style="margin-bottom: 10px" class="text-danger" v-if="form.errors.any()">Please correct
+                            form errors.
+                        </div>
+                        <avatar :size="128" :image="imgLoc"></avatar>
+                        <avatar-uploader @image-uploaded="setImgPath"></avatar-uploader>
+                        <small
+                                class="text-danger"
+                                v-if="form.errors.has('profile_image')"
+                                v-text="form.errors.get('profile_image')">
+                        </small>
+                        <input type="hidden" id="profile_image" name="profile_image" v-model="form.profile_image">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <label for="last_name" class="control-label">Last Name *</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder=""
+                               v-model="form.last_name" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('last_name')"
+                               v-text="form.errors.get('last_name')">
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="first_name" class="control-label">First Name *</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder=""
+                               v-model="form.first_name" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('first_name')"
+                               v-text="form.errors.get('first_name')">
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="other_names" class="control-label">Other Name(s)</label>
+                        <input type="text" class="form-control" id="other_names" name="other_names" placeholder=""
+                               v-model="form.other_names">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <div><label class="control-label">Gender *</label></div>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" v-model="form.gender" value="Male" > Male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" v-model="form.gender" value="Female"> Female
+                        </label>
+                        <div>
+                            <small class="text-danger"
+                                   v-if="form.errors.has('gender')"
+                                   v-text="form.errors.get('gender')">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div><label class="control-label">Marital Status *</label></div>
+                        <label class="radio-inline">
+                            <input type="radio" name="marital_status" v-model="form.marital_status" value="Single"
+                                   > Single
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="marital_status" v-model="form.marital_status" value="Married">
+                            Married
+                        </label>
+                        <div>
+                            <small class="text-danger"
+                                   v-if="form.errors.has('marital_status')"
+                                   v-text="form.errors.get('marital_status')">
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="dob" class="control-label">Date of Birth *</label>
+                        <input class="form-control" type="date" id="dob" name="dob" v-model="form.dob" 
+                               value="2018-07-22"
+                               min="1900-01-01"
+                               max="2018-01-01">
+                        <small class="text-danger"
+                               v-if="form.errors.has('dob')"
+                               v-text="form.errors.get('dob')">
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="control-label" type="email">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder=""
+                               v-model="form.email" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('email')"
+                               v-text="form.errors.get('email')">
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="primary_contact" class="control-label">Primary Contact *</label>
+                        <input type='text' class="form-control" id="primary_contact" name="primary_contact"
+                               placeholder="0XXXXXXXXX" v-model="form.primary_contact" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('primary_contact')"
+                               v-text="form.errors.get('primary_contact')">
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="auxiliary_contact" class="control-label">Auxiliary Contact</label>
+                        <input type="text" class="form-control" id="auxiliary_contact" name="auxiliary_contact"
+                               placeholder="0XXXXXXXXX" v-model="form.auxiliary_contact">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="residential_address" class="control-label">Residential Address *</label>
+                        <textarea type="text" class="form-control" id="residential_address"
+                                  name="residential_address"
+                                  placeholder="" v-model="form.residential_address" ></textarea>
+                        <small class="text-danger"
+                               v-if="form.errors.has('residential_address')"
+                               v-text="form.errors.get('residential_address')">
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="postal_address" class="control-label">Postal Address *</label>
+                        <textarea type="text" class="form-control" id="postal_address" name="postal_address"
+                                  placeholder="" v-model="form.postal_address" ></textarea>
+                        <small class="text-danger"
+                               v-if="form.errors.has('postal_address')"
+                               v-text="form.errors.get('postal_address')">
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="last_educational_institution_attended" class="control-label">Last Educational
+                            Institution Attended *</label>
+                        <input type="text" class="form-control" id="last_educational_institution_attended"
+                               name="last_educational_institution_attended" placeholder=""
+                               v-model="form.last_educational_institution_attended" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('last_educational_institution_attended')"
+                               v-text="form.errors.get('last_educational_institution_attended')">
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="highest_educational_level" class="control-label">Highest Educational Level
+                            *</label>
+                        <input type="text" class="form-control" id="highest_educational_level"
+                               name="highest_educational_level" placeholder=""
+                               v-model="form.highest_educational_level"
+                               >
+                        <small class="text-danger"
+                               v-if="form.errors.has('highest_educational_level')"
+                               v-text="form.errors.get('highest_educational_level')">
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="occupation" class="control-label">Occupation</label>
+                        <input type="text" class="form-control" id="occupation" name="occupation" placeholder=""
+                               v-model="form.occupation">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="years_of_working_experience" class="control-label">Years of Working Experience
+                            *</label>
+                        <input style="width: 100%" type="number" class="form-control"
+                               id="years_of_working_experience"
+                               name="years_of_working_experience" placeholder=""
+                               v-model="form.years_of_working_experience" >
+                        <small class="text-danger"
+                               v-if="form.errors.has('years_of_working_experience')"
+                               v-text="form.errors.get('years_of_working_experience')">
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label">Upload CV *</label>
+                        <div>
+                            <vue-base64-file-upload
+                                    class="v1"
+                                    accept="application/pdf"
+                                    image-class="v1-image"
+                                    input-class="v1-image"
+                                    :max-size="customImageMaxSize"
+                                    @size-exceeded="onSizeExceeded"
+                                    @file="onFile"
+                                    @load="onLoad"
+                                    :disable-preview="true"
+                                    placeholder="Click here to upload file"
+                                    :input-class="'fileInput'"
+                            />
+                        </div>
+                        <input type="hidden" id="cv" name="cv" v-model="form.cv">
+                        <small class="text-danger"
+                               v-if="form.errors.has('cv')"
+                               v-text="form.errors.get('cv')">
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Upload Highest Educational Certificate *</label>
+                        <div>
+                            <vue-base64-file-upload
+                                    class="v1"
+                                    accept="application/pdf"
+                                    image-class="v1-image"
+                                    input-class="v1-image"
+                                    :max-size="customImageMaxSize"
+                                    @size-exceeded="onSizeExceeded"
+                                    @file="onEduCertFile"
+                                    @load="onEduCertLoad"
+                                    :disable-preview="true"
+                                    placeholder="Click here to upload file"
+                                    :input-class="'fileInput'"
+                            />
+                        </div>
+                        <input type="hidden" id="highest_educational_cert" name="highest_educational_cert"
+                               v-model="form.highest_educational_cert">
+                        <small class="text-danger"
+                               v-if="form.errors.has('highest_educational_cert')"
+                               v-text="form.errors.get('highest_educational_cert')">
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label class="control-label">Select Course *</label>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course"
+                                          value="Electronic Engineering Technology"
+                                          @change="form.errors.clear('course')">Electronic Engineering
+                                Technology</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Cosmetology"
+                                          @change="form.errors.clear('course')">Cosmetology</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Garment Making"
+                                          @change="form.errors.clear('course')">Garment Making</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="English Language"
+                                          @change="form.errors.clear('course')">English Language</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Entrepreneurship"
+                                          @change="form.errors.clear('course')">Entrepreneurship</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Mathematics"
+                                          @change="form.errors.clear('course')">Mathematics</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Science"
+                                          @change="form.errors.clear('course')">Science</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="ICT"
+                                          @change="form.errors.clear('course')">ICT</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course"
+                                          value="Hospitality And Catering Management"
+                                          @change="form.errors.clear('course')">Hospitality And Catering
+                                Management</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course" value="Citrus Value Chain"
+                                          @change="form.errors.clear('course')">Citrus Value Chain</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="course" v-model="course"
+                                          value="Pineapple Value Chain"
+                                          @change="form.errors.clear('course')">Pineapple Value Chain</label>
+                        </div>
+                        <div>
+                            <small class="text-danger"
+                                   v-if="form.errors.has('course')"
+                                   v-text="form.errors.get('course')">
+                            </small>
+                            <input type="hidden" id="course" name="course"
+                                   v-model="form.course = course.join(', ')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="submit" value="Submit" class="btn btn-info pull-right"
+                               :disabled="form.errors.any()">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>
