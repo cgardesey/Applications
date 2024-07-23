@@ -274,7 +274,7 @@
                                 Management</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="course" v-model="course" value="Citrus Value Chain"
+                            <label><input type="checkbox" name="course" v-model="course" value="Citrus Value Chain2"
                                           @change="form.errors.clear('course')">Citrus Value Chain</label>
                         </div>
                         <div class="checkbox">
